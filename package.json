@@ -4,8 +4,8 @@
   "description": "Dependency injection with 'require()'",
   "main": "index.js",
   "dependencies": {
-    "resolve": "~0.6.2",
-    "rewire": "~2.0.0"
+    "resolve": "^0.6.2",
+    "rewire": "^2.0.0"
   },
   "devDependencies": {
     "mocha": "^1.18.2"
