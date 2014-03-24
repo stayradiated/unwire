@@ -1,4 +1,4 @@
-# Unwire
+G Unwire
 
 > Dependency injection with 'require()'
 
@@ -92,6 +92,10 @@ assert(main() === 'some content');
 ```
 
 ## Changelog
+
+### 0.0.3
+
+- Remove self from require.cache so that module.parent is always up to date
 
 ### 0.0.2
 
