@@ -89,3 +89,13 @@ main.__set__('readFile', readFile);
 
 assert(main() === 'some content');
 ```
+
+## Changelog
+
+### 0.0.2
+
+- Use `module.parent` to detect where unwire is being called from
+
+### 0.0.1
+
+- Initial commit

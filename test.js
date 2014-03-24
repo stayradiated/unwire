@@ -1,6 +1,6 @@
 'use strict';
 
-var unwire = require('./index')(require);
+var unwire = require('./index');
 
 var unwired = unwire('./index');
 
