@@ -41,3 +41,6 @@ unwire.flush = function (path) {
 };
 
 module.exports = unwire;
+
+// remove self from require.cache so that 'module.parent' is always up to date
+delete require.cache[__filename];
