@@ -23,4 +23,13 @@ var unwire = function unwire (path) {
   return fake;
 };
 
+unwire.flush = function (path) {
+
+  var folder = Path.dirname(module.parent.filename);
+  var fullPath = resolve.sync(path, { basedir: folder });
+
+  return delete require.cache[fullPath];
+
+};
+
 module.exports = unwire;

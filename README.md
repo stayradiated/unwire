@@ -57,7 +57,7 @@ module.exports = {
 *The test*
 
 ```javascript
-var unwire = require('unwire')(require);
+var unwire = require('unwire');
 var mockFs = require('../test/mock_fs');
 
 var readFile = unwire('../source/readFile');
@@ -84,6 +84,7 @@ var mockFs = require('../test/mock_fs/');
 var readFile = rewire('./source/readFile');
 var main = rewire('./source/main');
 
+// what we want to avoid
 readFile.__set__('fs', mockFs);
 main.__set__('readFile', readFile);
 
@@ -95,6 +96,8 @@ assert(main() === 'some content');
 ### 0.0.2
 
 - Use `module.parent` to detect where unwire is being called from
+- Add readme
+- Add better tests
 
 ### 0.0.1
 
