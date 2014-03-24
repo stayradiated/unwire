@@ -25,10 +25,18 @@ var unwire = function unwire (path) {
 
 unwire.flush = function (path) {
 
-  var folder = Path.dirname(module.parent.filename);
-  var fullPath = resolve.sync(path, { basedir: folder });
+  // only delete a single path
+  if (path) {
+    var folder = Path.dirname(module.parent.filename);
+    var fullPath = resolve.sync(path, { basedir: folder });
+    return delete require.cache[fullPath];
+  }
 
-  return delete require.cache[fullPath];
+  // else delete everything
+  for (var key in require.cache) {
+    if (! require.cache.hasOwnProperty(key)) continue;
+    delete require.cache[key];
+  }
 
 };
 

@@ -98,6 +98,7 @@ assert(main() === 'some content');
 - Use `module.parent` to detect where unwire is being called from
 - Add readme
 - Add better tests
+- Add unwire.flush();
 
 ### 0.0.1
 
