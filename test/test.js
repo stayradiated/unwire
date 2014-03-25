@@ -1,5 +1,5 @@
 var assert = require('assert');
-var unwire = require('../index');
+var unwire = require('../lib');
 
 var mockFs = {
   readFileSync: function () {
@@ -30,6 +30,24 @@ describe('unwire', function () {
     main = require('./source/main');
 
     assert(main() === 'some content');
+
+  });
+
+  it('should reuse the unwired version', function () {
+
+    // flush everything
+    unwire.flush();
+
+    var a = unwire('./source/readFile');
+    var b = unwire('./source/readFile');
+
+    assert.equal(a, b);
+
+    a.__unwire__();
+
+    var c = unwire('./source/readFile');
+    assert.notEqual(a, c);
+    assert.notEqual(b, c);
 
   });
 
