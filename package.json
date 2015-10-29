@@ -1,17 +1,17 @@
 {
   "name": "unwire",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Dependency injection with 'require()'",
   "main": "lib/index.js",
   "dependencies": {
-    "resolve": "^0.6.2",
-    "rewire": "^2.0.0"
+    "resolve": "^1.1.6"
   },
   "devDependencies": {
-    "mocha": "^1.18.2"
+    "babel": "^5.8.29",
+    "mocha": "^2.3.3"
   },
   "scripts": {
-    "test": "mocha -R spec test"
+    "test": "mocha -R spec --compilers js:babel/register test"
   },
   "repository": {
     "type": "git",
