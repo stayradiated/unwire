@@ -34,16 +34,9 @@ describe('unwire', function () {
     flush('./source/main');
   });
 
-  it('should reuse the unwired version', function () {
+  it('should mock everytime', function () {
     const a = unwire('./source/readFile', mockReadFile);
     const b = unwire('./source/readFile', mockReadFile);
-
-    assert.equal(a, b);
-
-    flushAll();
-    const c = unwire('./source/readFile', mockReadFile);
-
-    assert.notEqual(a, c);
-    assert.notEqual(b, c);
+    assert.notEqual(a, b);
   });
 });
