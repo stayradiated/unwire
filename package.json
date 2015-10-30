@@ -2,17 +2,20 @@
   "name": "unwire",
   "version": "1.0.0",
   "description": "Dependency injection with 'require()'",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "dependencies": {
     "resolve": "^1.1.6"
   },
   "devDependencies": {
     "babel": "^5.8.29",
+    "babel-cli": "^6.0.2",
     "mocha": "^2.3.3"
   },
   "scripts": {
-    "test": "mocha -R spec --compilers js:babel/register test"
+    "test": "mocha -R spec --compilers js:babel/register test",
+    "build": "babel src --out-dir dist"
   },
+  "lib": "dist",
   "repository": {
     "type": "git",
     "url": "git://github.com/stayradiated/unwire.git"

@@ -1,5 +1,5 @@
 import assert from 'assert';
-import unwire, {flush, flushAll} from '../lib';
+import unwire, {flush, flushAll} from '../src';
 
 function mockReadFile (original) {
   return function () {

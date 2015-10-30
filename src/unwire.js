@@ -6,11 +6,11 @@ const ORIGINAL = Symbol('original');
 export function unwire (module, from, mock) {
   const folder = path.dirname(from);
   const fullPath = resolve.sync(module, {basedir: folder});
-  const cache = require.cache[fullPath];
 
   // check if we have already rewired this path
   var original;
-  if (cache.hasOwnProperty(ORIGINAL)) {
+  const cache = require.cache[fullPath];
+  if ((typeof cache !== 'undefined') && cache.hasOwnProperty(ORIGINAL)) {
     original = cache[ORIGINAL];
   } else {
     original = require(fullPath);
@@ -18,8 +18,11 @@ export function unwire (module, from, mock) {
 
   // Overwrite cache
   const fake = mock(original);
-  cache[ORIGINAL] = original;
-  cache.exports = fake;
+
+  require.cache[fullPath] = {
+    exports: fake,
+    [ORIGINAL]: original,
+  };
 
   return fake;
 }
