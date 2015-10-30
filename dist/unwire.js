@@ -3,6 +3,7 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+exports.getFullPath = getFullPath;
 exports.unwire = unwire;
 exports.flush = flush;
 exports.flushAll = flushAll;
@@ -21,9 +22,13 @@ var _resolve2 = _interopRequireDefault(_resolve);
 
 var ORIGINAL = Symbol('original');
 
-function unwire(module, from, mock) {
+function getFullPath(module, from) {
   var folder = _path2['default'].dirname(from);
-  var fullPath = _resolve2['default'].sync(module, { basedir: folder });
+  return _resolve2['default'].sync(module, { basedir: folder });
+}
+
+function unwire(module, from, mock) {
+  var fullPath = getFullPath(module, from);
 
   // check if we have already rewired this path
   var original;
@@ -44,15 +49,14 @@ function unwire(module, from, mock) {
   return fake;
 }
 
-// only delete a single module
+// remove a module from the require cache
 
 function flush(module, from) {
-  var folder = _path2['default'].dirname(from);
-  var fullPath = _resolve2['default'].sync(module, { basedir: folder });
+  var fullPath = getFullPath(module, from);
   return delete require.cache[fullPath];
 }
 
-// reset everything
+// completly clear the require cache
 
 function flushAll() {
   for (var key in require.cache) {
