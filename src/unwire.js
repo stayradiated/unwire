@@ -3,9 +3,13 @@ import resolve from 'resolve';
 
 const ORIGINAL = Symbol('original');
 
-export function unwire (module, from, mock) {
+export function getFullPath (module, from) {
   const folder = path.dirname(from);
-  const fullPath = resolve.sync(module, {basedir: folder});
+  return resolve.sync(module, {basedir: folder});
+}
+
+export function unwire (module, from, mock) {
+  const fullPath = getFullPath(module, from);
 
   // check if we have already rewired this path
   var original;
@@ -27,15 +31,13 @@ export function unwire (module, from, mock) {
   return fake;
 }
 
-
-// only delete a single module
+// remove a module from the require cache
 export function flush (module, from) {
-  const folder = path.dirname(from);
-  const fullPath = resolve.sync(module, {basedir: folder});
+  const fullPath = getFullPath(module, from);
   return delete require.cache[fullPath];
 }
 
-// reset everything
+// completly clear the require cache
 export function flushAll () {
   for (const key in require.cache) {
     if (require.cache.hasOwnProperty(key)) {
