@@ -1,15 +1,33 @@
-import path from 'path';
-import resolve from 'resolve';
+'use strict';
 
-const ORIGINAL = Symbol('original');
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.unwire = unwire;
+exports.flush = flush;
+exports.flushAll = flushAll;
 
-export function unwire(module, from, mock) {
-  const folder = path.dirname(from);
-  const fullPath = resolve.sync(module, { basedir: folder });
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _resolve = require('resolve');
+
+var _resolve2 = _interopRequireDefault(_resolve);
+
+var ORIGINAL = Symbol('original');
+
+function unwire(module, from, mock) {
+  var folder = _path2['default'].dirname(from);
+  var fullPath = _resolve2['default'].sync(module, { basedir: folder });
 
   // check if we have already rewired this path
   var original;
-  const cache = require.cache[fullPath];
+  var cache = require.cache[fullPath];
   if (typeof cache !== 'undefined' && cache.hasOwnProperty(ORIGINAL)) {
     original = cache[ORIGINAL];
   } else {
@@ -17,26 +35,27 @@ export function unwire(module, from, mock) {
   }
 
   // Overwrite cache
-  const fake = mock(original);
+  var fake = mock(original);
 
-  require.cache[fullPath] = {
-    exports: fake,
-    [ORIGINAL]: original
-  };
+  require.cache[fullPath] = _defineProperty({
+    exports: fake
+  }, ORIGINAL, original);
 
   return fake;
 }
 
 // only delete a single module
-export function flush(module, from) {
-  const folder = path.dirname(from);
-  const fullPath = resolve.sync(module, { basedir: folder });
+
+function flush(module, from) {
+  var folder = _path2['default'].dirname(from);
+  var fullPath = _resolve2['default'].sync(module, { basedir: folder });
   return delete require.cache[fullPath];
 }
 
 // reset everything
-export function flushAll() {
-  for (const key in require.cache) {
+
+function flushAll() {
+  for (var key in require.cache) {
     if (require.cache.hasOwnProperty(key)) {
       delete require.cache[key];
     }
