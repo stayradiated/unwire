@@ -1,16 +1,14 @@
-import * as lib from './unwire';
-import caller from './caller';
+import * as core from './core'
+import caller from 'caller'
 
-export default function unwire (path, mock) {
-  return lib.unwire(path, caller(), mock);
+export default function unwire (modulePath, mock) {
+  return core.unwire(modulePath, caller(), mock)
 }
 
-export function flush (path) {
-  return lib.flush(path, caller());
+export function flush (modulePath) {
+  return core.flush(modulePath, caller())
 }
 
-export const flushAll = lib.flushAll;
-
-// remove self from require.cache
-// so that `module.parent` is always up to date
-delete require.cache[__filename];
+export const unwireWithContext = core.unwire
+export const flushWithContext = core.flush
+export const flushAllModules = core.flushAllModules

@@ -3,10 +3,10 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.getFullPath = getFullPath;
+exports.resolveModulePath = resolveModulePath;
 exports.unwire = unwire;
 exports.flush = flush;
-exports.flushAll = flushAll;
+exports.flushAllModules = flushAllModules;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -22,13 +22,17 @@ var _resolve2 = _interopRequireDefault(_resolve);
 
 var ORIGINAL = Symbol('Original');
 
-function getFullPath(module, from) {
-  var folder = _path2['default'].dirname(from);
-  return _resolve2['default'].sync(module, { basedir: folder });
+function resolveModulePath(modulePath, context) {
+  var folder = _path2['default'].dirname(context);
+  return _resolve2['default'].sync(modulePath, { basedir: folder });
 }
 
-function unwire(module, from, mock) {
-  var fullPath = getFullPath(module, from);
+function unwire(modulePath, context) {
+  var mock = arguments.length <= 2 || arguments[2] === undefined ? function (x) {
+    return x;
+  } : arguments[2];
+
+  var fullPath = resolveModulePath(modulePath, context);
   var cache = require.cache[fullPath];
 
   // check if we have already rewired this path
@@ -39,26 +43,27 @@ function unwire(module, from, mock) {
     original = require(fullPath);
   }
 
-  // Overwrite cache
-  var fake = mock(original);
+  // mock the module
+  var mockedModule = mock(original);
 
+  // overwrite the require cache
   require.cache[fullPath] = _defineProperty({
-    exports: fake
+    exports: mockedModule
   }, ORIGINAL, original);
 
-  return fake;
+  return mockedModule;
 }
 
 // remove a module from the require cache
 
-function flush(module, from) {
-  var fullPath = getFullPath(module, from);
+function flush(modulePath, context) {
+  var fullPath = resolveModulePath(modulePath, context);
   return delete require.cache[fullPath];
 }
 
-// completly clear the require cache
+// completely clear the require cache
 
-function flushAll() {
+function flushAllModules() {
   for (var key in require.cache) {
     if (require.cache.hasOwnProperty(key)) {
       delete require.cache[key];
