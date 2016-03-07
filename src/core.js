@@ -8,6 +8,15 @@ export function resolveModulePath (modulePath, context) {
   return resolve.sync(modulePath, {basedir: folder})
 }
 
+export function replace (modulePath, context, value) {
+  const fullPath = resolveModulePath(modulePath, context)
+
+  // overwrite the require cache
+  require.cache[fullPath] = {
+    exports: value,
+  }
+}
+
 export function unwire (modulePath, context, mock = (x) => x) {
   const fullPath = resolveModulePath(modulePath, context)
   const cache = require.cache[fullPath]
@@ -26,7 +35,7 @@ export function unwire (modulePath, context, mock = (x) => x) {
   // overwrite the require cache
   require.cache[fullPath] = {
     exports: mockedModule,
-    [ORIGINAL]: original
+    [ORIGINAL]: original,
   }
 
   return mockedModule

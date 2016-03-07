@@ -1,16 +1,13 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.resolveModulePath = resolveModulePath;
+exports.replace = replace;
 exports.unwire = unwire;
 exports.flush = flush;
 exports.flushAllModules = flushAllModules;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var _path = require('path');
 
@@ -20,11 +17,24 @@ var _resolve = require('resolve');
 
 var _resolve2 = _interopRequireDefault(_resolve);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var ORIGINAL = Symbol('Original');
 
 function resolveModulePath(modulePath, context) {
-  var folder = _path2['default'].dirname(context);
-  return _resolve2['default'].sync(modulePath, { basedir: folder });
+  var folder = _path2.default.dirname(context);
+  return _resolve2.default.sync(modulePath, { basedir: folder });
+}
+
+function replace(modulePath, context, value) {
+  var fullPath = resolveModulePath(modulePath, context);
+
+  // overwrite the require cache
+  require.cache[fullPath] = {
+    exports: value
+  };
 }
 
 function unwire(modulePath, context) {
@@ -55,14 +65,12 @@ function unwire(modulePath, context) {
 }
 
 // remove a module from the require cache
-
 function flush(modulePath, context) {
   var fullPath = resolveModulePath(modulePath, context);
   return delete require.cache[fullPath];
 }
 
 // completely clear the require cache
-
 function flushAllModules() {
   for (var key in require.cache) {
     if (require.cache.hasOwnProperty(key)) {
