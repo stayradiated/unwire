@@ -15,7 +15,7 @@
   },
   "scripts": {
     "test": "mocha -R spec --compilers js:babel-register test",
-    "build": "babel src --out-dir dist",
+    "build": "rm -rf dist && babel src --out-dir dist",
     "prepublish": "npm run build"
   },
   "lib": "dist",

@@ -9,6 +9,10 @@ exports.unwire = unwire;
 exports.flush = flush;
 exports.flushAllModules = flushAllModules;
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
@@ -25,7 +29,8 @@ var ORIGINAL = Symbol('Original');
 
 function resolveModulePath(modulePath, context) {
   var folder = _path2.default.dirname(context);
-  return _resolve2.default.sync(modulePath, { basedir: folder });
+  var resolvedPath = _resolve2.default.sync(modulePath, { basedir: folder });
+  return _fs2.default.realpathSync(resolvedPath);
 }
 
 function replace(modulePath, context, value) {
