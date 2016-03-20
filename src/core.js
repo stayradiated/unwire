@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 import resolve from 'resolve'
 
@@ -5,7 +6,8 @@ const ORIGINAL = Symbol('Original')
 
 export function resolveModulePath (modulePath, context) {
   const folder = path.dirname(context)
-  return resolve.sync(modulePath, {basedir: folder})
+  const resolvedPath = resolve.sync(modulePath, {basedir: folder})
+  return fs.realpathSync(resolvedPath)
 }
 
 export function replace (modulePath, context, value) {
