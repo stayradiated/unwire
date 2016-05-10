@@ -17,6 +17,8 @@ export function replace (modulePath, context, value) {
   require.cache[fullPath] = {
     exports: value,
   }
+
+  return value
 }
 
 export function unwire (modulePath, context, mock = (x) => x) {

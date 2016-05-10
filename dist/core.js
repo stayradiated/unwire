@@ -40,6 +40,8 @@ function replace(modulePath, context, value) {
   require.cache[fullPath] = {
     exports: value
   };
+
+  return value;
 }
 
 function unwire(modulePath, context) {
