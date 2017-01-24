@@ -45,9 +45,9 @@ function replace(modulePath, context, value) {
 }
 
 function unwire(modulePath, context) {
-  var mock = arguments.length <= 2 || arguments[2] === undefined ? function (x) {
+  var mock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (x) {
     return x;
-  } : arguments[2];
+  };
 
   var fullPath = resolveModulePath(modulePath, context);
   var cache = require.cache[fullPath];

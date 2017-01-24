@@ -10,19 +10,16 @@ npm install unwire
 
 ## Example Usage
 
-**request.js**
+**config.js**
 
 *The file that uses a dependency you want to mock*
 
 ```javascript
-var http = require('http');
+import fs from 'fs'
 
-module.exports = function (fn) {
-  return http.request({
-    host: 'https://npmjs.org',
-    path: '/',
-  }, fn);
-};
+export default function readConfig () {
+  return fs.readFileSync('./config.json')
+}
 ```
 
 **test.js**
@@ -30,28 +27,29 @@ module.exports = function (fn) {
 *Testing source/test.js but mocking http*
 
 ```javascript
-var assert = require('assert');
-var unwire = require('unwire').unwire;
+import assert from 'assert'
+import unwire from 'unwire'
 
-function mockRequest (value) {
+function mockFs (config) {
   return {
-    request: function (options, callback) {
-      return callback(null, value);
-    },
-  };
-};
+    readFileSync: () => config,
+  }
+}
 
 describe('request.js', function () {
   it('should make a http request', function () {
-    var requsetValue = 'request value';
-    var request = unwire('./request.js', mockRequest(requestValue));
+    const expectedConfig = 'CONFIG'
 
-    request(function (err, response) {
-      assert.equal(err, null);
-      assert.equal(response, requestValue);
-    });
-  });
-});
+    // replace fs with our mocked fs
+    unwire('fs', mockFs(expectedConfig))
+
+    // load config.js - it will use the mocked fs object
+    const readConfig = require('./config.js')
+
+    const config = readConfig()
+    assert.equal(config, expectedConfig)
+  })
+})
 ```
 
 ## License
