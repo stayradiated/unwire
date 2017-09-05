@@ -5,6 +5,9 @@ import resolve from 'resolve'
 const ORIGINAL = Symbol('Original')
 
 export function resolveModulePath (modulePath, context) {
+  if (resolve.isCore(modulePath)) {
+    return modulePath
+  }
   const folder = path.dirname(context)
   const resolvedPath = resolve.sync(modulePath, {basedir: folder})
   return fs.realpathSync(resolvedPath)

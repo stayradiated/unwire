@@ -45,4 +45,10 @@ describe('unwire', () => {
     assert.equal(require('./source/styles.css'), value)
     flush('./source/styles.css')
   })
+
+  it('should mock a core module', () => {
+    unwire('fs', mockReadFile)
+    assert.equal(require('fs')(), 'some content')
+    flush('fs')
+  })
 })
