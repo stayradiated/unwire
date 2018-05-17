@@ -5,10 +5,10 @@
   "main": "src/index.js",
   "dependencies": {
     "caller": "^1.0.1",
-    "resolve": "^1.4.0"
+    "resolve": "^1.7.1"
   },
   "devDependencies": {
-    "mocha": "^3.5.0"
+    "mocha": "^5.1.1"
   },
   "scripts": {
     "test": "mocha -R spec test"
