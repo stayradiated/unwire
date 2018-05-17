@@ -28,7 +28,7 @@ export default function readConfig () {
 
 ```javascript
 import assert from 'assert'
-import unwire from 'unwire'
+import { unwire } from 'unwire'
 
 function mockFs (config) {
   return {

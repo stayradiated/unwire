@@ -1,7 +1,7 @@
-import assert from 'assert'
-import {describe, it} from 'mocha'
+const assert = require('assert')
+const {describe, it} = require('mocha')
 
-import unwire, {replace, flush} from '../src'
+const {unwire, replace, flush} = require('../src')
 
 function mockReadFile (original) {
   return () => 'some content'

@@ -1,10 +1,10 @@
-import fs from 'fs'
-import path from 'path'
-import resolve from 'resolve'
+const fs = require('fs')
+const path = require('path')
+const resolve = require('resolve')
 
 const ORIGINAL = Symbol('Original')
 
-export function resolveModulePath (modulePath, context) {
+function resolveModulePath (modulePath, context) {
   if (resolve.isCore(modulePath)) {
     return modulePath
   }
@@ -13,7 +13,7 @@ export function resolveModulePath (modulePath, context) {
   return fs.realpathSync(resolvedPath)
 }
 
-export function replace (modulePath, context, value) {
+function replace (modulePath, context, value) {
   const fullPath = resolveModulePath(modulePath, context)
 
   // overwrite the require cache
@@ -24,7 +24,7 @@ export function replace (modulePath, context, value) {
   return value
 }
 
-export function unwire (modulePath, context, mock = (x) => x) {
+function unwire (modulePath, context, mock = (x) => x) {
   const fullPath = resolveModulePath(modulePath, context)
   const cache = require.cache[fullPath]
 
@@ -49,16 +49,24 @@ export function unwire (modulePath, context, mock = (x) => x) {
 }
 
 // remove a module from the require cache
-export function flush (modulePath, context) {
+function flush (modulePath, context) {
   const fullPath = resolveModulePath(modulePath, context)
   return delete require.cache[fullPath]
 }
 
 // completely clear the require cache
-export function flushAllModules () {
+function flushAllModules () {
   for (const key in require.cache) {
     if (require.cache.hasOwnProperty(key)) {
       delete require.cache[key]
     }
   }
+}
+
+module.exports = {
+  resolveModulePath,
+  replace,
+  unwire,
+  flush,
+  flushAllModules
 }
