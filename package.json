@@ -1,6 +1,6 @@
 {
   "name": "unwire",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "Dependency injection with 'require()'",
   "author": "George Czabania",
   "license": "MIT",
