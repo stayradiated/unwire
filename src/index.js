@@ -20,5 +20,6 @@ module.exports = {
   replaceWithContext: core.replace,
   unwireWithContext: core.unwire,
   flushWithContext: core.flush,
-  flushAllModules: core.flushAllModules
+  flushAllModules: core.flushAllModules,
+  resolveModulePath: core.resolveModulePath
 }
