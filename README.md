@@ -1,6 +1,6 @@
 # Unwire
 
-> Dependency injection with 'require()'
+> Dependency injection for Node.js
 
 ## Install
 
@@ -15,42 +15,55 @@ npm install unwire
 *The file that uses a dependency you want to mock*
 
 ```javascript
-import fs from 'fs'
+const fs = require('fs')
 
-export default function readConfig () {
+function readConfig () {
   return fs.readFileSync('./config.json')
 }
+
+module.exports = readConfig
 ```
 
 **test.js**
 
-*Testing source/test.js but mocking http*
+*Testing config.js but mocking the fs module*
 
 ```javascript
-import assert from 'assert'
-import { unwire } from 'unwire'
+const assert = require('assert')
+const { mock } = require('unwire')
 
-function mockFs (config) {
-  return {
-    readFileSync: () => config,
-  }
-}
-
-describe('request.js', function () {
-  it('should make a http request', function () {
-    const expectedConfig = 'CONFIG'
-
-    // replace fs with our mocked fs
-    unwire('fs', mockFs(expectedConfig))
-
-    // load config.js - it will use the mocked fs object
-    const readConfig = require('./config.js')
-
-    const config = readConfig()
-    assert.equal(config, expectedConfig)
-  })
+const mockFs = (config) => ({
+  readFileSync: () => config,
 })
+
+// force fs.readFileSync to read our expected config
+const expectedConfig = 'CONFIG'
+mock('fs', mockFs(expectedConfig))
+
+// load config.js - it will use the mocked fs object
+const readConfig = require('./config.js')
+
+const config = readConfig()
+assert.equal(config, expectedConfig)
 ```
+
+## API
+
+### mock(modulePath, mock)
+
+### replace(modulePath, value)
+
+### flush(modulePath)
+
+### mockWithContext(modulePath, context, mock)
+
+### replaceWithContext(modulePath, context, value)
+
+### flushWithContext(modulePath, context)
+
+### flushAllModules()
+
+### resolveModulePath(modulePath, context)
 
 ## License
 

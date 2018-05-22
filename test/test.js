@@ -1,54 +1,51 @@
-const assert = require('assert')
-const {describe, it} = require('mocha')
+const test = require('ava')
 
-const {unwire, replace, flush} = require('../src')
+const {mock, replace, flush} = require('../src')
 
-function mockReadFile (original) {
+function mockReadFile() {
   return () => 'some content'
 }
 
-describe('unwire', () => {
-  it('should fail by default', () => {
-    const main = require('./source/main')
+test('should fail by default', t => {
+  const main = require('./helpers/main')
 
-    // by default, main() should throw an error
-    assert.throws(main, /no such file or directory/)
+  // By default, main() should throw an error
+  t.throws(main, /no such file or directory/)
 
-    // remove ./source/main from require.cache
-    flush('./source/main')
-  })
+  // Remove ./helpers/main from require.cache
+  flush('./helpers/main')
+})
 
-  it('should replace readFile in ./source/main', () => {
-    // unwire readfile
-    // https://www.npmjs.org/package/rewire => details on how to use rewire
-    unwire('./source/readFile', mockReadFile)
+test('should replace readFile in ./helpers/main', t => {
+  // Mock readfile
+  // https://www.npmjs.org/package/rewire => details on how to use rewire
+  mock('./helpers/read-file', mockReadFile)
 
-    // load main
-    // note that it now uses the rewired version of readFile
-    flush('./source/main')
-    const main = require('./source/main')
+  // Load main
+  // note that it now uses the rewired version of readFile
+  flush('./helpers/main')
+  const main = require('./helpers/main')
 
-    assert(main() === 'some content')
+  t.is(main(), 'some content')
 
-    flush('./source/main')
-  })
+  flush('./helpers/main')
+})
 
-  it('should mock everytime', () => {
-    const a = unwire('./source/readFile', mockReadFile)
-    const b = unwire('./source/readFile', mockReadFile)
-    assert.notEqual(a, b)
-  })
+test('should mock everytime', t => {
+  const a = mock('./helpers/read-file', mockReadFile)
+  const b = mock('./helpers/read-file', mockReadFile)
+  t.not(a, b)
+})
 
-  it('should replace a css file', () => {
-    const value = {container: 'container'}
-    replace('./source/styles.css', value)
-    assert.equal(require('./source/styles.css'), value)
-    flush('./source/styles.css')
-  })
+test('should replace a css file', t => {
+  const value = {container: 'container'}
+  replace('./helpers/styles.css', value)
+  t.is(require('./helpers/styles.css'), value)
+  flush('./helpers/styles.css')
+})
 
-  it('should mock a core module', () => {
-    unwire('fs', mockReadFile)
-    assert.equal(require('fs')(), 'some content')
-    flush('fs')
-  })
+test('should mock a core module', t => {
+  mock('fs', mockReadFile)
+  t.is(require('fs')(), 'some content')
+  flush('fs')
 })

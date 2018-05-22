@@ -4,7 +4,7 @@ const resolve = require('resolve')
 
 const ORIGINAL = Symbol('Original')
 
-function resolveModulePath (modulePath, context) {
+function resolveModulePath(modulePath, context) {
   if (resolve.isCore(modulePath)) {
     return modulePath
   }
@@ -13,60 +13,63 @@ function resolveModulePath (modulePath, context) {
   return fs.realpathSync(resolvedPath)
 }
 
-function replace (modulePath, context, value) {
+function replace(modulePath, context, value) {
   const fullPath = resolveModulePath(modulePath, context)
 
-  // overwrite the require cache
+  // Overwrite the require cache
   require.cache[fullPath] = {
-    exports: value,
+    exports: value
   }
 
   return value
 }
 
-function unwire (modulePath, context, mock = (x) => x) {
+function mock(modulePath, context, mock = x => x) {
   const fullPath = resolveModulePath(modulePath, context)
   const cache = require.cache[fullPath]
 
-  // check if we have already rewired this path
-  var original
-  if ((typeof cache !== 'undefined') && cache.hasOwnProperty(ORIGINAL)) {
+  // Check if we have already rewired this path
+  let original
+  if (
+    typeof cache !== 'undefined' &&
+    Object.hasOwnProperty.call(cache, ORIGINAL)
+  ) {
     original = cache[ORIGINAL]
   } else {
     original = require(fullPath)
   }
 
-  // mock the module
+  // Mock the module
   const mockedModule = mock(original)
 
-  // overwrite the require cache
+  // Overwrite the require cache
   require.cache[fullPath] = {
     exports: mockedModule,
-    [ORIGINAL]: original,
+    [ORIGINAL]: original
   }
 
   return mockedModule
 }
 
-// remove a module from the require cache
-function flush (modulePath, context) {
+// Remove a module from the require cache
+function flush(modulePath, context) {
   const fullPath = resolveModulePath(modulePath, context)
   return delete require.cache[fullPath]
 }
 
-// completely clear the require cache
-function flushAllModules () {
+// Completely clear the require cache
+function flushAllModules() {
   for (const key in require.cache) {
-    if (require.cache.hasOwnProperty(key)) {
+    if (Object.hasOwnProperty.call(require.cache, key)) {
       delete require.cache[key]
     }
   }
 }
 
 module.exports = {
-  resolveModulePath,
-  replace,
-  unwire,
   flush,
-  flushAllModules
+  flushAllModules,
+  mock,
+  replace,
+  resolveModulePath
 }

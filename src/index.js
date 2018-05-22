@@ -1,24 +1,24 @@
-const core = require('./core')
 const caller = require('caller')
+const core = require('./core')
 
-function unwire (modulePath, mock) {
-  return core.unwire(modulePath, caller(), mock)
+function mock(modulePath, mock) {
+  return core.mock(modulePath, caller(), mock)
 }
 
-function replace (modulePath, value) {
+function replace(modulePath, value) {
   return core.replace(modulePath, caller(), value)
 }
 
-function flush (modulePath) {
+function flush(modulePath) {
   return core.flush(modulePath, caller())
 }
 
 module.exports = {
-  unwire,
+  mock,
   replace,
   flush,
+  mockWithContext: core.mock,
   replaceWithContext: core.replace,
-  unwireWithContext: core.unwire,
   flushWithContext: core.flush,
   flushAllModules: core.flushAllModules,
   resolveModulePath: core.resolveModulePath
