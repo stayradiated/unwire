@@ -1,10 +1,13 @@
-const fs = require('fs')
-const path = require('path')
-const resolve = require('resolve')
+import fs from 'fs'
+import path from 'path'
+import resolve from 'resolve'
 
+import { MockFn } from './types'
+
+const I = (x: any): any => x
 const ORIGINAL = Symbol('Original')
 
-function resolveModulePath(modulePath, context) {
+const resolveModulePath = (modulePath: string, context: string) => {
   if (resolve.isCore(modulePath)) {
     return modulePath
   }
@@ -13,7 +16,7 @@ function resolveModulePath(modulePath, context) {
   return fs.realpathSync(resolvedPath)
 }
 
-function replace(modulePath, context, value) {
+const replace = (modulePath: string, context: string, value: any) => {
   const fullPath = resolveModulePath(modulePath, context)
 
   // Overwrite the require cache
@@ -24,7 +27,7 @@ function replace(modulePath, context, value) {
   return value
 }
 
-function mock(modulePath, context, mock = x => x) {
+const mock = (modulePath: string, context: string, mock: MockFn = I) => {
   const fullPath = resolveModulePath(modulePath, context)
   const cache = require.cache[fullPath]
 
@@ -52,13 +55,13 @@ function mock(modulePath, context, mock = x => x) {
 }
 
 // Remove a module from the require cache
-function flush(modulePath, context) {
+const flush = (modulePath: string, context: string) => {
   const fullPath = resolveModulePath(modulePath, context)
   return delete require.cache[fullPath]
 }
 
 // Completely clear the require cache
-function flushAllModules() {
+const flushAllModules = () => {
   for (const key in require.cache) {
     if (Object.hasOwnProperty.call(require.cache, key)) {
       delete require.cache[key]
@@ -66,7 +69,7 @@ function flushAllModules() {
   }
 }
 
-module.exports = {
+export {
   flush,
   flushAllModules,
   mock,

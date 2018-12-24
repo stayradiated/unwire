@@ -8,18 +8,25 @@
     "url": "https://github.com/stayradiated/unwire/issues"
   },
   "homepage": "https://github.com/stayradiated/unwire",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "xo --fix && ava"
+    "test": "xo --fix && ava-ts",
+    "build": "tsc"
   },
   "dependencies": {
     "caller": "^1.0.1",
-    "resolve": "^1.7.1"
+    "resolve": "^1.9.0"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
+    "@types/caller": "^1.0.0",
+    "@types/node": "^10.12.18",
+    "@types/resolve": "0.0.8",
+    "ava": "^1.0.1",
+    "ava-ts": "^0.25.2",
     "eslint-import-resolver-node": "^0.3.2",
-    "xo": "^0.21.1"
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2",
+    "xo": "^0.23.0"
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,5 @@
-// Usually readFile is actually readFile
-// but in the test, it is the rewired version of readFile
-const readFile = require('./read-file')
+const fs = require('fs')
 
 module.exports = function() {
-  return readFile()
+  return fs.readFileSync('/tmp/some_file_that_does_not_exist')
 }
