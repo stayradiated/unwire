@@ -12,7 +12,10 @@ const resolveModulePath = (modulePath: string, context: string) => {
     return modulePath
   }
   const folder = path.dirname(context)
-  const resolvedPath = resolve.sync(modulePath, {basedir: folder})
+  const resolvedPath = resolve.sync(modulePath, {
+    basedir: folder,
+    extensions: ['.js', '.ts']
+  })
   return fs.realpathSync(resolvedPath)
 }
 
