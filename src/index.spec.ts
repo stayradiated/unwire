@@ -2,29 +2,29 @@ import anyTest, {TestInterface} from 'ava';
 
 const test = anyTest as TestInterface<{}>;
 
-const { mock, replace, flush } = require('../src')
+const { mock, replace, flush } = require('./index')
 
 const MOCK_FS = () => ({
   readFileSync: () => 'some content'
 })
 
 test('should fail by default', t => {
-  flush('./helpers/main')
-  const main = require('./helpers/main')
+  flush('./testHelpers/main')
+  const main = require('./testHelpers/main')
 
   // By default, main() should throw an error
   t.throws(main, /no such file or directory/)
 })
 
-test('should replace fs in ./helpers/main', t => {
+test('should mock fs in ./testHelpers/main', t => {
   // Mock readfile
   // https://www.npmjs.org/package/rewire => details on how to use rewire
   mock('fs', MOCK_FS)
 
   // Load main
   // note that it now uses the rewired version of readFile
-  flush('./helpers/main')
-  const main = require('./helpers/main')
+  flush('./testHelpers/main')
+  const main = require('./testHelpers/main')
 
   t.is(main(), 'some content')
 })
@@ -35,9 +35,9 @@ test('should mock everytime', t => {
   t.not(a, b)
 })
 
-test('should replace a css file', t => {
+test('should replace a files contents', t => {
   const value = {container: 'container'}
-  replace('./helpers/styles.css', value)
-  t.is(require('./helpers/styles.css'), value)
-  flush('./helpers/styles.css')
+  replace('./testHelpers/empty', value)
+  t.is(require('./testHelpers/empty'), value)
+  flush('./testHelpers/empty')
 })

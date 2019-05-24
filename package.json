@@ -9,24 +9,22 @@
   },
   "homepage": "https://github.com/stayradiated/unwire",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "xo --fix && ava-ts",
-    "build": "tsc"
+    "test": "pkg-test",
+    "build": "pkg-build",
+    "tidy": "pkg-tidy",
+    "lint": "pkg-lint"
   },
   "dependencies": {
     "caller": "^1.0.1",
-    "resolve": "^1.9.0"
+    "resolve": "^1.11.0"
   },
   "devDependencies": {
+    "@mishguru/package": "6.2.2",
     "@types/caller": "^1.0.0",
-    "@types/node": "^10.12.18",
-    "@types/resolve": "0.0.8",
-    "ava": "^1.0.1",
-    "ava-ts": "^0.25.2",
-    "eslint-import-resolver-node": "^0.3.2",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.2.2",
-    "xo": "^0.23.0"
+    "@types/node": "^12.0.2",
+    "@types/resolve": "0.0.8"
   },
   "repository": {
     "type": "git",
@@ -42,10 +40,5 @@
     "test",
     "leak",
     "inspect"
-  ],
-  "xo": {
-    "semicolon": false,
-    "space": 2,
-    "prettier": true
-  }
+  ]
 }

@@ -21,7 +21,7 @@ const replace = (modulePath: string, context: string, value: any) => {
 
   // Overwrite the require cache
   require.cache[fullPath] = {
-    exports: value
+    exports: value,
   }
 
   return value
@@ -48,7 +48,7 @@ const mock = (modulePath: string, context: string, mock: MockFn = I) => {
   // Overwrite the require cache
   require.cache[fullPath] = {
     exports: mockedModule,
-    [ORIGINAL]: original
+    [ORIGINAL]: original,
   }
 
   return mockedModule
@@ -69,10 +69,4 @@ const flushAllModules = () => {
   }
 }
 
-export {
-  flush,
-  flushAllModules,
-  mock,
-  replace,
-  resolveModulePath
-}
+export { flush, flushAllModules, mock, replace, resolveModulePath }

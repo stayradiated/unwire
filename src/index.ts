@@ -3,15 +3,15 @@ import * as core from './core'
 
 import { MockFn } from './types'
 
-function mock(modulePath: string, mock: MockFn) {
+function mock (modulePath: string, mock: MockFn) {
   return core.mock(modulePath, caller(), mock)
 }
 
-function replace(modulePath: string, value: any) {
+function replace (modulePath: string, value: any) {
   return core.replace(modulePath, caller(), value)
 }
 
-function flush(modulePath: string) {
+function flush (modulePath: string) {
   return core.flush(modulePath, caller())
 }
 
@@ -29,5 +29,5 @@ export {
   replaceWithContext,
   flushWithContext,
   flushAllModules,
-  resolveModulePath
+  resolveModulePath,
 }
