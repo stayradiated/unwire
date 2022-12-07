@@ -21,7 +21,7 @@
     "resolve": "^1.11.0"
   },
   "devDependencies": {
-    "@mishguru/package": "6.2.2",
+    "@mishguru/package": "9.6.0",
     "@types/caller": "^1.0.0",
     "@types/node": "^12.0.2",
     "@types/resolve": "0.0.8"
